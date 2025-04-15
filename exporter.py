@@ -21,8 +21,8 @@ def export_to_docx(publicacoes, duplicados, buffer):
         doc.add_paragraph(f" - {nome}: {qtd}")
     doc.add_paragraph("")
 
-    for pub in publicacoes:
-        doc.add_paragraph(pub["cabecalho"], style="Intense Quote")
+    for i, pub in enumerate(publicacoes, start=1):
+        doc.add_paragraph(f"Publicação {i} de {len(publicacoes)}", style="Intense Quote")
 
         doc.add_paragraph(f"Número do Processo: {pub['numero_processo']}")
         doc.add_paragraph(f"Fonte: {pub['origem']}")
