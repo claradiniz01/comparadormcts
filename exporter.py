@@ -1,4 +1,3 @@
-
 from docx import Document
 from docx.shared import RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
@@ -21,28 +20,28 @@ def export_to_docx(publicacoes, duplicados, buffer):
         doc.add_paragraph(f" - {nome}: {qtd}")
     doc.add_paragraph("")
 
-    for i, pub in enumerate(publicacoes, start=1):
-        doc.add_paragraph(f"Publicação {i} de {len(publicacoes)}", style="Intense Quote")
+    total = len(publicacoes)
+    for i, pub in enumerate(publicacoes, 1):
+        table = doc.add_table(rows=1, cols=1)
+        table.allow_autofit = True
+        cell = table.cell(0, 0)
 
-        doc.add_paragraph(f"Número do Processo: {pub['numero_processo']}")
-        doc.add_paragraph(f"Fonte: {pub['origem']}")
+        run = cell.paragraphs[0].add_run(f"Publicação {i} de {total}\n")
+        run.bold = True
 
-        # Corpo do texto justificado linha a linha, sem excesso de espaçamento
         for linha in pub["texto"].splitlines():
             if linha.strip():
-                p = doc.add_paragraph()
-                run = p.add_run(linha.strip())
+                p = cell.add_paragraph(linha.strip())
                 p.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
         if "duplicado_de" in pub:
-            doc.add_paragraph("🔁 Publicação duplicada também encontrada em:")
+            cell.add_paragraph("\nDuplicada também encontrada em:")
             for origem_info in pub["duplicado_de"]:
-                doc.add_paragraph(f" - {origem_info}")
+                cell.add_paragraph(f" - {origem_info}")
 
         doc.add_paragraph("")
 
     doc.add_paragraph("________________________________________")
-    doc.add_paragraph("Legenda de cores:")
     doc.add_paragraph("Criado por Maria Clara Nogueira Diniz - OAB/PI 23765")
     doc.add_paragraph("Site: www.mcts.adv.br | E-mail: contato@mcts.adv.br")
     doc.save(buffer)
