@@ -6,7 +6,7 @@ from collections import Counter
 
 def export_to_docx(publicacoes, duplicados, buffer):
     doc = Document()
-    titulo = doc.add_heading("Diário Consolidado - MCTS", 0)
+    titulo = doc.add_heading("Diário Consolidado", 0)
     titulo.runs[0].font.color.rgb = RGBColor(15, 30, 68)
 
     doc.add_paragraph(f"Data de geração: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
